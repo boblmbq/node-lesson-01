@@ -1,0 +1,20 @@
+{
+  "name": "lesson-1",
+  "version": "1.0.0",
+  "description": "my first lesson about node.js",
+  "main": "index.ts",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "Danylo Sichkar",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1"
+  },
+  "dependencies": {
+    "commander": "^11.1.0",
+    "cross-env": "^7.0.3"
+  }
+}
