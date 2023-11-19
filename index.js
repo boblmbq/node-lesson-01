@@ -1,3 +1,2 @@
-console.log("hello from root index")
-
-require("./contacts")
+const {program} = require("commander");
+const ContactsManager = require("./contacts");

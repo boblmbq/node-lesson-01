@@ -1,37 +1,34 @@
-const fs = require("fs/promises");
-const path = require("path");
+const { nanoid } = require("nanoid");
+require("nanoid");
 
-const contactsPath = path.join(__dirname, "db", "contacts.json");
+const DatabaseManager = require("./DBManager");
 
-class Contacts {
-  constructor(filePath) {
-    this.filePath = filePath;
+class ContactsManager {
+  constructor() {
+    this.DBManager = new DatabaseManager();
   }
+
   listContacts = async () => {
-    const data = await fs.readFile(this.filePath);
-    return JSON.parse(data);
+    const data = await this.DBManager.fetchContacts();
+    return data;
   };
 
   getContactById = async (contactId) => {
     const contacts = await this.listContacts();
-    const idx = contacts.findIndex((contact) => contact.id === contactId);
-    if (idx === -1) {
-      console.log("sorry we didn't found the user");
-      return null;
-    }
-    return contacts[idx];
+    return contacts.find((contact) => contact.id === contactId) ?? null; //шукаємо користувача по айді та повертаємо його, якщо прийшло undefined то повертаємо null
   };
 
-  removeContact(contactId) {
-    // ...твій код. Повертає об'єкт видаленого контакту. Повертає null, якщо контакт з таким id не знайдений.
-    
-  }
+  removeContact = async (contactId) => {
+    const contact = await this.DBManager.removeContact(contactId);
+    return contact;
+  };
 
-  addContact(name, email, phone) {
-    // ...твій код. Повертає об'єкт доданого контакту.
-  }
+  addContact = async (name, email, phone) => {
+    const newContact = { id: nanoid(21), name, email, phone };
+    const addedUser = await this.DBManager.addContact(newContact);
+    return addedUser;
+  };
 }
 
-const contacts = new Contacts(contactsPath);
 
-contacts.getContactById("qdggE76Jtbfd9eWJHrssH");
+module.exports = new ContactsManager(); // ось тут не зрозумів чому ми експортуємо не екземпляр
