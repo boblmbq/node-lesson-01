@@ -37,7 +37,7 @@ class DatabaseManager {
   };
 
   removeContact = async (id) => {
-    const contacts = this.fetchContacts();
+      const contacts = await this.fetchContacts();
     const idx = contacts.findIndex((contact) => contact.id === id);
     if (idx === -1) {
       console.log("sorry, the user can't be found");
