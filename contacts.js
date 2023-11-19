@@ -4,8 +4,8 @@ require("nanoid");
 const DatabaseManager = require("./DBManager");
 
 class ContactsManager {
-  constructor() {
-    this.DBManager = new DatabaseManager();
+  constructor(filename) {
+    this.DBManager = new DatabaseManager(filename);
   }
 
   listContacts = async () => {
@@ -31,4 +31,4 @@ class ContactsManager {
 }
 
 
-module.exports = new ContactsManager(); // ось тут не зрозумів чому ми експортуємо не екземпляр
+module.exports = ContactsManager; 

@@ -1,5 +1,6 @@
 const yargs = require("yargs");
-const ContactsManager = require("./contacts");
+const Manager = require("./contacts");
+const ContactsManager = new Manager("contacts.json") // хотів би запитати чи правильно я зробив коли написав ось так
 
 yargs.command({
   command: "list",
@@ -11,28 +12,12 @@ yargs.command({
 });
 
 yargs.command({
-  command: "list",
-  describe: "Shows list of your contacts",
-  builder: {
-    id: {
-      describe: "contact's id",
-      demandOption: false,
-      type: "string",
-    },
-  },
-  handler: async function (argv) {
-    const contacts = await ContactsManager.getContactById(argv.id);
-    console.log(contacts);
-  },
-});
-
-yargs.command({
   command: "get",
   describe: "Shows list of your contacts",
   builder: {
     id: {
       describe: "contact's id",
-      demandOption: false,
+      demandOption: true,
       type: "string",
     },
   },
@@ -81,3 +66,5 @@ yargs.command({
 });
 
 yargs.parse();
+
+// я не розібрався нормально з yargs та commander тому написат ось так на yargs

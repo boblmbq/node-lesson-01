@@ -4,8 +4,8 @@ const { readFile, writeFile } = require("fs/promises"); // беремо мето
 const { join } = require("path"); // беремо метод join для того щоб система сама визначила як писати "дорогу" до файлу спираючись на те яка в мене система
 
 class DatabaseManager {
-  constructor() {
-    this.databasePath = join(process.cwd(), "db", "contacts.json");
+  constructor(filename) {
+    this.databasePath = join(process.cwd(), "db", `${filename}`);
     // пишемо process.cwd() щоб дізнатись поточну папку де виконується код та далі пишемо шлях до бази даних
   }
 
