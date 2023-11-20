@@ -1,70 +1,48 @@
 const yargs = require("yargs");
+const argv = yargs(process.argv.slice(2)).argv;
 const Manager = require("./contacts");
-const ContactsManager = new Manager("contacts.json") // хотів би запитати чи правильно я зробив коли написав ось так
+const ContactsManager = new Manager("contacts.json"); // хотів би запитати чи правильно я зробив коли написав ось так
 
-yargs.command({
-  command: "list",
-  describe: "Shows list of your contacts",
-  handler: async () => {
-    const contacts = await ContactsManager.listContacts();
-    console.log(contacts);
-  },
-});
 
-yargs.command({
-  command: "get",
-  describe: "Shows list of your contacts",
-  builder: {
-    id: {
-      describe: "contact's id",
-      demandOption: true,
-      type: "string",
-    },
-  },
-  handler: async function (argv) {
-    const gettedContact = await ContactsManager.getContactById(argv.id);
-    console.log(gettedContact);
-  },
-});
+async function invokeAction({ action, id, name, email, phone }) {
+  switch (action) {
+    case "list":
+      const contacts = await ContactsManager.listContacts();
+      console.log(contacts);
+      break;
+    
+    case "get":
+      if (!id) {
+        console.log("sorry a user's 'id' is required");
+        return;
+      }
+      const gettedContact = await ContactsManager.getContactById(id);
+      console.log(gettedContact);
+      break;
 
-yargs.command({
-  command: "add",
-  describe: "adds a contact",
-  builder: {
-    name: {
-      demandOption: true,
-      type: "string",
-    },
-    email: {
-      demandOption: true,
-      type: "string",
-    },
-    phone: {
-      demandOption: true,
-      type: "string",
-    },
-  },
-  handler: async ({ name, email, phone }) => {
-    const addedContact = await ContactsManager.addContact(name, email, phone);
-    console.log(addedContact);
-  },
-});
+    case "add":
+      if (!name || !email || !phone) {
+        console.log(
+          "sorry to create a user you need: name, email and phone properties"
+        );
+        return;
+      }
+      const addedContact = await ContactsManager.addContact(name, email, phone);
+      console.log(addedContact);
+      break;
 
-yargs.command({
-  command: "remove",
-  describe: "adds a contact",
-  builder: {
-    id: {
-      demandOption: true,
-      type: "string",
-    },
-  },
-  handler: async (argv) => {
-    const removedContact = await ContactsManager.removeContact(argv.id);
-    console.log(removedContact);
-  },
-});
+    case "remove":
+      if (!id) {
+        console.log("sorry we need the ID of a user to delete him");
+        return;
+      }
+      const removedContact = await ContactsManager.removeContact(id);
+      console.log(removedContact);
+      break;
 
-yargs.parse();
+    default:
+      console.warn("\x1B[31m Unknown action type!");
+  }
+}
 
-// я не розібрався нормально з yargs та commander тому написат ось так на yargs
+invokeAction(argv);
